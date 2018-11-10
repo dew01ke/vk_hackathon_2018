@@ -2,8 +2,23 @@ $(document).ready(function() {
     "use strict";
 
     let options = {};
-    let levels = 3;
+    let levelsLimit = 3;
     let u_max = new Int32Array([15, 15, 15, 15, 14, 14, 14, 13, 13, 12, 11, 10, 9, 8, 6, 3, 0]);
+
+    const match_t = (function () {
+        function match_t(screen_idx, pattern_lev, pattern_idx, distance) {
+            if (typeof screen_idx === "undefined") { screen_idx=0; }
+            if (typeof pattern_lev === "undefined") { pattern_lev=0; }
+            if (typeof pattern_idx === "undefined") { pattern_idx=0; }
+            if (typeof distance === "undefined") { distance=0; }
+
+            this.screen_idx = screen_idx;
+            this.pattern_lev = pattern_lev;
+            this.pattern_idx = pattern_idx;
+            this.distance = distance;
+        }
+        return match_t;
+    })();
 
     function loadImageToCanvas(url, elementId) {
         return new Promise(function(resolve, reject) {
@@ -32,9 +47,6 @@ $(document).ready(function() {
         const height = element.original_height;
 
         console.log(width, height);
-
-        // let img_u8 = new jsfeat.matrix_t(width, height, jsfeat.U8_t | jsfeat.C1_t);
-        // jsfeat.imgproc.grayscale(imageData.data, width, height, img_u8);
 
         return ctx.getImageData(0, 0, width, height);
     }
@@ -85,12 +97,31 @@ $(document).ready(function() {
         return count;
     }
 
-    function computePattern(elementId) {
+    function renderCorners(corners, count, img, step) {
+        console.log('renderCorners', corners, count);
+
+        var pix = (0xff << 24) | (0x00 << 16) | (0xff << 8) | 0x00;
+        for(var i=0; i < count; ++i)
+        {
+            var x = corners[i].x;
+            var y = corners[i].y;
+            var off = (x + y * step);
+            img[off] = pix;
+            img[off-1] = pix;
+            img[off+1] = pix;
+            img[off-step] = pix;
+            img[off+step] = pix;
+        }
+    }
+
+    function compute(elementId, maxLevels) {
         const output = {
             image: null,
             descriptors: [],
-            corners: []
+            corners: [],
+            corners_num: 0
         };
+        const levels = maxLevels | levelsLimit | 1;
         let imageData = getDataFromCanvas(elementId);
         let img_u8 = new jsfeat.matrix_t(imageData.width, imageData.height, jsfeat.U8_t | jsfeat.C1_t);
         jsfeat.imgproc.grayscale(imageData.data, imageData.width, imageData.height, img_u8);
@@ -134,10 +165,10 @@ $(document).ready(function() {
         lev_descr = output.descriptors[0];
 
         jsfeat.imgproc.gaussian_blur(lev0_img, lev_img, options.blur_size|0); // this is more robust
-        corners_num = detectKeypoints(lev_img, lev_corners, max_per_level);
-        jsfeat.orb.describe(lev_img, lev_corners, corners_num, lev_descr);
+        output.corners_num = detectKeypoints(lev_img, lev_corners, max_per_level);
+        jsfeat.orb.describe(lev_img, lev_corners, output.corners_num, lev_descr);
 
-        console.log("train " + lev_img.cols + "x" + lev_img.rows + " points: " + corners_num);
+        console.log("[1] train " + lev_img.cols + "x" + lev_img.rows + " points: " + output.corners_num);
 
         sc /= sc_inc;
 
@@ -170,30 +201,6 @@ $(document).ready(function() {
         return output;
     }
 
-    function computeFrame(elementId) {
-        let output = {
-            image: null,
-            descriptor: [],
-            corners: []
-        };
-
-        let imageData = getDataFromCanvas(elementId);
-        let img_u8 = new jsfeat.matrix_t(imageData.width, imageData.height, jsfeat.U8_t | jsfeat.C1_t);
-        let img_u8_smooth = new jsfeat.matrix_t(imageData.width, imageData.height, jsfeat.U8_t | jsfeat.C1_t);
-
-        jsfeat.imgproc.grayscale(imageData.data, imageData.width, imageData.height, img_u8);
-        jsfeat.imgproc.gaussian_blur(img_u8, img_u8_smooth, options.blur_size | 0);
-
-        jsfeat.yape06.laplacian_threshold = options.lap_thres | 0;
-        jsfeat.yape06.min_eigen_value_threshold = options.eigen_thres | 0;
-
-        let num_corners = detectKeypoints(img_u8_smooth, output.corners, 500);
-
-        jsfeat.orb.describe(img_u8_smooth, output.corners, num_corners, output.descriptor);
-
-        return output;
-    }
-
     function loader() {
         return Promise.all([
             loadImageToCanvas('./assets/img1.png', 'img1'),
@@ -209,10 +216,13 @@ $(document).ready(function() {
         console.log('patternData', patternData);
         console.log('frameData', frameData);
 
-        const frameCalc = computePattern('canvas');
-        const patternCalc = computePattern('img1');
+        const frameCalc = compute('canvas', 1);
+        const patternCalc = compute('img1', 3);
 
         console.log('frameCalc', frameCalc);
         console.log('patternCalc', patternCalc);
+
+        let frameBuffer = new Uint32Array(frameData.data.buffer);
+        renderCorners(frameCalc.corners[0], frameCalc.corners_num, frameBuffer, frameData.width);
     });
 });
