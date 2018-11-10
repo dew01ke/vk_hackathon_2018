@@ -4,10 +4,27 @@
     <meta charset="UTF-8">
     <title>Application</title>
 
+    <script src="./lib/jquery.js"></script>
     <script src="./lib/jsfeat.js"></script>
-    <script src="./app.js"></script>
+    <script src="./lib/utils.js"></script>
+    <!--<script src="./app.js"></script>-->
+    <script src="./main.js"></script>
 </head>
 <body>
-    application
+    <div>
+        <canvas id="img1" width="640" height="480" style="width: 300px !important;"></canvas>
+        <canvas id="img2" width="640" height="480" style="width: 300px !important;"></canvas>
+    </div>
+    <div>
+        <canvas id="canvas" width="640" height="480" style="width: 600px !important;"></canvas>
+    </div>
+
+    <script>
+        const utils = new Utils('error');
+
+        // $(document).ready(function() {
+        //     const application = new Application();
+        // });
+    </script>
 </body>
 </html>
