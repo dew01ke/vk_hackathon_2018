@@ -4,23 +4,31 @@
     <meta charset="UTF-8">
     <title>Application</title>
 
+    <script src="./js/data.js"></script>
+
     <script src="./lib/jquery.js"></script>
     <script src="./lib/jsfeat.js"></script>
     <script src="./lib/utils.js"></script>
-    <script src="./main.js"></script>
+    <script src="./lib/compatibility.js"></script>
+    <script src="./lib/utils.js"></script>
+    <script src="./js/client.js"></script>
+    <script src="app.js"></script>
 </head>
 <body>
     <div>
         <canvas id="img1" width="640" height="480" style="width: 300px !important;"></canvas>
         <canvas id="img2" width="640" height="480" style="width: 300px !important;"></canvas>
+        <canvas id="img3" width="640" height="480" style="width: 300px !important;"></canvas>
     </div>
     <div>
+        <video id="video" src="./assets/video1.mp4" muted="muted"></video>
+    </div>
+
+    <div id="container" style="position: relative;">
         <canvas id="canvas" width="640" height="480" style="width: 600px !important;"></canvas>
     </div>
 
     <script>
-        const utils = new Utils('error');
-
         // $(document).ready(function() {
         //     const application = new Application();
         // });
