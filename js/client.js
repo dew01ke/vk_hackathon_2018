@@ -148,7 +148,11 @@ function fillInfo(id) {
 		for (var i = 0; i < data.concerts.length; i++) {
 			var item = data.concerts[i];
 			out += "<div class='concert'><div class='when'><div class='date'>" + item.date + "</div><div class='time'>" + item.time + "</div></div><div class='title'>" + item.title + "</div><div class='performer'>" + item.performer + "</div></div>";
-			out += "<div class='button' item='" + id + "'>Забронировать</div>";
+			if (item.url && item.url != '') {
+				out += "<a target='_blank' href=\"" + item.url + "\"><div class='button' item='" + id + "' url=\"" + item.url + "\">Забронировать</div></a>";
+			} else {
+				out += "<div class='button' item='" + id + "'>Забронировать</div>";
+			}
 		}
 		out += "</div>";
 	}
@@ -177,7 +181,9 @@ function fillInfo(id) {
 	});
 	
 	$(".view[item=info] .reserve .button").click(function() {
-		showView("reserve", $(this).attr("item"));
+		if (!$(this).attr("url")) {
+			showView("reserve", $(this).attr("item"));
+		}
 	});
 }
 
@@ -308,5 +314,19 @@ window.addEventListener('error', function(e) {
 $(document).ready(function() {
 
 	setInterval(mainLoop, settings.mainInterval);
+
+	var isMobile = {
+		Android: function() {
+			return navigator.userAgent.match(/Android/i);
+		},
+		iOS: function() {
+			return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+		}
+	}
+	
+	if (!isMobile.Android() && !isMobile.iOS()) {
+		// Раскомментировать, чтобы на десктопах ставилась заглушка
+		// showView("desktop");
+	}
 
 });
