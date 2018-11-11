@@ -4,6 +4,7 @@ var settings = {
 	moveSmoothing: 50
 };
 var visibleMarkers = [];
+var configApiEndpoint = 'http://hack18/index.php';
 
 Number.prototype.padLeft = function(base,chr) {
 	var len = (String(base || 10).length - String(this).length)+1;
@@ -210,15 +211,10 @@ function updateVisibleMarkers(markers) {
 
 function getVisiblePosters() {
 	return visibleMarkers;
-	// var dummyData = []
-	// dummyData.push( { id: 1, x: 100 + Math.random() * 50, y: 300 + Math.random() * 100 } );
-	// if (Math.floor(viewTime) % 2 == 0) dummyData.push( { id: 2, x: 300 + Math.random() * 100, y: 200 + Math.random() * 100 } );
-	// return dummyData;
 }
 
 function addMarker(obj) {
 	var data = posterData[obj.id];
-	console.log(obj);
 	var markerData = "<div class='marker' item='" + obj.id + "' style='top:" + obj.x + ";left:" + obj.y + ";'><div class='portrait' style=\"background-image:url('" + data.image + "');\"></div><div class='name'><div class='last_name'>" + data.last_name + "</div><div class='first_name'>" + data.first_name + "</div></div></div>";
 	
 	$("#markers").append(markerData);
@@ -307,36 +303,94 @@ function mainLoop() {
 	}
 }
 
+function loadConfig(url) {
+    return new Promise(function(resolve, reject) {
+        $.getJSON(url)
+            .done(function(data) {
+                let output = {};
+
+                if (data) {
+                    for (let i in data) {
+                        if (data.hasOwnProperty(i)) {
+                            const value = data[i];
+
+                            output[value.id] = {
+                                ...value.composer,
+                                ...value,
+                                bio: {
+                                    full: value.composer.bio_full,
+                                    short: value.composer.bio_short,
+                                },
+                                about: {
+                                    full: value.composer.about_full,
+                                    short: value.composer.about_short,
+                                },
+                                pattern_image: value.image
+                            };
+                        }
+                    }
+                } else {
+                    output = fallbackPosterData
+                }
+
+                return resolve(output);
+            })
+            .fail(function() {
+                return resolve(fallbackPosterData);
+            });
+    });
+}
+
+function getPatternDataFromConfig(config) {
+    let output = [];
+
+    if (config) {
+        output = Object.keys(config).map(function(key) {
+            return { id: config[key].id, url: config[key].pattern_image };
+        });
+    }
+
+    return output;
+}
 
 window.addEventListener('error', function(e) {}, true);
   
 $(document).ready(function() {
-	setInterval(mainLoop, settings.mainInterval);
+    function init(config) {
+        return new Promise(function(resolve, reject) {
+            console.log('[init config data]', config);
+            posterData = config;
 
-    const cameraWorker = new CameraWorker();
+            setInterval(mainLoop, settings.mainInterval);
 
-    // Кое-кто не учил в интро, что начальная анимация может блокироваться из-за расчета данных от паттернов
-    setTimeout(function() {
-        cameraWorker.load([
-            { id: 'img1', url: './assets/il.jpg' },
-            // { id: 'img2', url: './assets/poster1_plain.png' },
-            // { id: 'img2', url: './assets/poster2_plain.png' }
-        ], { mode: 'webcam' }).then(function() {
-            showView('camera');
-        })
-	}, 550);
+            const cameraWorker = new CameraWorker();
 
-	var isMobile = {
-		Android: function() {
-			return navigator.userAgent.match(/Android/i);
-		},
-		iOS: function() {
-			return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-		}
-	};
-	
-	if (!isMobile.Android() && !isMobile.iOS()) {
-		// Раскомментировать, чтобы на десктопах ставилась заглушка
-		// showView("desktop");
-	}
+            // Кое-кто не учил в интро, что начальная анимация может блокироваться из-за расчета данных от паттернов
+            setTimeout(function() {
+                cameraWorker.load(getPatternDataFromConfig(config), { mode: 'webcam' }).then(function() {
+                    showView('camera');
+                })
+            }, 500);
+
+            var isMobile = {
+                Android: function() {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                }
+            };
+
+            if (!isMobile.Android() && !isMobile.iOS()) {
+                // Раскомментировать, чтобы на десктопах ставилась заглушка
+                // showView("desktop");
+            }
+
+            return resolve(true);
+        });
+    }
+
+    loadConfig(configApiEndpoint).then(function(config) {
+        return init(config);
+    });
 });

@@ -1,6 +1,7 @@
-var posterData = {
+var fallbackPosterData = {
 	img1: {
 		image: "./data/tchaikovsky/tchaikovsky.jpg",
+		pattern_image: "./assets/il.jpg",
 		first_name: "Петр Ильич",
 		last_name: "Чайковский",
 		years: "1840-1993",
@@ -22,6 +23,7 @@ var posterData = {
 	},
 	img2: {
 		image: "./data/rakhmaninov/rakhmaninov.jpg",
+        pattern_image: "./assets/poster2_plain.jpg",
 		first_name: "Сергей Васильевич",
 		last_name: "Рахманинов",
 		years: "1873-1943",
