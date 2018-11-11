@@ -1,7 +1,6 @@
 <?php
 function getConcerts($composer)
 {
-  echo $composer->last_name;
   if ($composer->last_name == 'Рахманинов') {
     return [
 	    (object)[
