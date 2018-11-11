@@ -22,7 +22,7 @@ function showMain()
   global $pdo;
   $posters = getPosters($pdo);
 
-  header('Content-type: application/json');
+  header('Content-type: application/json; charset=utf-8');
 
   foreach ($posters as $poster) {
     if($poster->composer_id) {

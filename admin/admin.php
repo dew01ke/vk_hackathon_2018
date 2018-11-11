@@ -153,8 +153,8 @@ function addFragment()
     <div class="form-group">';
   echo '<label for="_age">Возрастная категория</label> <select class="custom-select form-control" id="_age" name="age">
 <option value=""></option>
-<option value="0-5">0-5</option>
-<option value="6-20">6-20</option>
+<option value="Дети">Дети</option>
+<option value="Подростки">Подростки</option>
 </select>
     </div>
     <div class="form-group">';
@@ -164,7 +164,7 @@ function addFragment()
 <option value="female">женский</option>
 </select>
     </div>';
-  echo '<input  class="btn btn-primary" type="submit"/>';
+  echo '<input  class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
 
   $body = ob_get_contents();
@@ -179,6 +179,7 @@ function _addFragment()
 
   $data = $_POST;
   $data['track_id'] = $_GET['track_id'];
+  //ffmpeg
   //createFragment($pdo, $_POST);
   header('Location: /admin.php?route=track&id='  . $_GET['track_id']);
 }
@@ -200,12 +201,12 @@ function editFragment()
        <label for="_age">Возрастная категория</label>
              <select class="custom-select form-control" id="_age" name="age">
 <option value=""></option>
-<option value="0-5"'  .
-    ($fragment->age == '0-5' ? ' selected' : '')
-    . '>0-5</option>
-<option value="6-20"'  .
-    ($fragment->age == '6-20' ? ' selected' : '')
-    . '>6-20</option>
+<option value="Дети"'  .
+    ($fragment->age == 'Дети' ? ' selected' : '')
+    . '>Дети</option>
+<option value="Подростки"'  .
+    ($fragment->age == 'Подростки' ? ' selected' : '')
+    . '>Подростки</option>
 </select></div>';
   echo '<div class="form-group"><label for="_gender">Пол</label> <select class="custom-select form-control" id="_gender" name="sex">
 <option value=""></option>
@@ -216,7 +217,7 @@ function editFragment()
     ($fragment->sex == 'female' ? ' selected' : '')
     . '>женский</option>
 </select></div>';
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
   $body = ob_get_contents();
   ob_end_clean();
@@ -299,7 +300,7 @@ function editTrack()
   }
   
   echo '</select></div>';
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
   
   $body = ob_get_contents();
@@ -341,7 +342,7 @@ function addTrack()
   }
   
   echo '</select></div>';
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
 
 
@@ -413,7 +414,7 @@ function editComposer()
   echo '<div class="form-group"><label for="_bs">Краткая биография</label> <textarea id="_bs" name="bio_short" class="form-control" >' . htmlspecialchars($composer->bio_short) . '</textarea></div>';
   echo '<div class="form-group"><label for="_bf">Подробная биография</label> <textarea id="_bf" name="bio_full" class="form-control" >' . htmlspecialchars($composer->bio_full) . '</textarea></div>';
 
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
   
   $body = ob_get_contents();
@@ -457,7 +458,7 @@ function addComposer()
   echo '<div class="form-group"><label for="_sb">Краткая биография</label> <textarea id="_sb" name="bio_short" class="form-control" ></textarea></div>';
   echo '<div class="form-group"><label for="_fb">Подробная биография</label> <textarea id="_fb" name="bio_full" class="form-control" ></textarea></div>';
 
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
   
   $body = ob_get_contents();
@@ -533,7 +534,7 @@ function editPoster()
   }
   
   echo '</select></div>';
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
   
   $body = ob_get_contents();
@@ -575,7 +576,7 @@ function addPoster()
   }
   echo '</select></div>';
 
-  echo '<input class="btn btn-primary" type="submit"/>';
+  echo '<input class="btn btn-primary" type="submit" value="Сохранить"/>';
   echo '</form>';
   
   $body = ob_get_contents();

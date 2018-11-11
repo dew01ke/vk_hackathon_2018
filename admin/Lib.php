@@ -38,10 +38,10 @@ function getTracks($composer = null)
 				     (object)[
 					      'id' => 1,
 					      'sex' => 'male',
-					      'age' => '0-5',
+					      'age' => 'Дети',
 					      'range' => '12:45-24:14',
 					      'track_id' => 1,
-					      'url' => '/audio/MechetinaplaysRachmaninov-1.mp3',
+					      'url' => '/audio/MechetinaplaysRachmaninov-fragment-1.mp3',
 
 					      ],
 				     (object)[
@@ -49,15 +49,15 @@ function getTracks($composer = null)
 					      'sex' => 'female',
 					      'age' => '',
 					      'range' => '00:00-10:14',
-					      'track_id' => 1,		     'url' => '/audio/MechetinaplaysRachmaninov-2.mp3',
+					      'track_id' => 1,		     'url' => '/audio/MechetinaplaysRachmaninov-fragment-2.mp3',
 
 					      ],
 				     (object)[
 					      'id' => 3,
 					      'sex' => '',
-					      'age' => '5-20',
+					      'age' => 'Подростки',
 					      'range' => '00:00-10:14',
-					      'track_id' => 1,		     'url' => '/audio/MechetinaplaysRachmaninov-3.mp3',
+					      'track_id' => 1,		     'url' => '/audio/MechetinaplaysRachmaninov-fragment-3.mp3',
 
 					      ],
 ]
@@ -69,6 +69,7 @@ function getTracks($composer = null)
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
+		     'fragments' => [],
 		     ],
 	    (object)[
 		     'id' => '3',
@@ -77,6 +78,7 @@ function getTracks($composer = null)
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
+		     'fragments' => [],
 		     ],
 	    (object)[
 		     'id' => '4',
@@ -85,6 +87,7 @@ function getTracks($composer = null)
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 2,
+		     'fragments' => [],
 		     ],
 	    (object)[
 		     'id' => '5',
@@ -93,6 +96,7 @@ function getTracks($composer = null)
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 2,
+		     'fragments' => [],
 		     ],
 	     
 	     ];
