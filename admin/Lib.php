@@ -24,13 +24,53 @@ function getDB()
 }
 
 
+
+function _1getFragments($pdo)
+{
+  $c = [];
+  $stmt = $pdo->query("SELECT id, sex, age, range, track_id, url FROM fragment ORDER BY id DESC");
+  while ($row = $stmt->fetch())
+    $c[] = $row;
+  return $c;
+}
+
+function _1getFragment($pdo, $id)
+{
+  $stmt = $pdo->query("SELECT id, sex, age, range, track_id, url FROM fragment WHERE id = " . (int)$id);
+  return $stmt->fetch();
+}
+
+function createFragment($pdo, $data)
+{
+  $stmt = $pdo->prepare("INSERT INTO fragment SET sex = :sex, age = :age, range = :range, track_id = :track_id, url = :url");
+  $stmt->execute($data);
+}
+
+function _1updateFragment($pdo, $fragment)
+{
+  $stmt = $pdo->prepare("UPDATE fragment SET sex = :sex, age = :age, range = :range, track_id = :track_id, url = :url WHERE id = " . (int)$fragment->id);
+  $stmt->execute(['sex' => $fragment->sex, 'age' => $fragment->age, 'range' => $fragment->range, 'track_id' => $fragment->track_id, 'url' => $fragment->url]);
+}
+
+function _1removeFragment($pdo, $id)
+{
+  $stmt = $pdo->query("DELETE FROM fragment WHERE id = " . (int)$id);
+}
+
+
+
+
+
+
+
+
 function getTracks($composer = null)
 {
   $tracks = [
 	    (object)[
 		     'id' => '1',
 		     'title' => 'MechetinaplaysRachmaninov',
-		     'url' => '/audio/MechetinaplaysRachmaninov.mp3',
+		     'url' => '/admin/audio/MechetinaplaysRachmaninov.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
@@ -41,7 +81,7 @@ function getTracks($composer = null)
 					      'age' => 'Дети',
 					      'range' => '12:45-24:14',
 					      'track_id' => 1,
-					      'url' => '/audio/MechetinaplaysRachmaninov-fragment-1.mp3',
+					      'url' => '/admin/audio/MechetinaplaysRachmaninov-fragment-1.mp3',
 
 					      ],
 				     (object)[
@@ -49,7 +89,7 @@ function getTracks($composer = null)
 					      'sex' => 'female',
 					      'age' => '',
 					      'range' => '00:00-10:14',
-					      'track_id' => 1,		     'url' => '/audio/MechetinaplaysRachmaninov-fragment-2.mp3',
+					      'track_id' => 1,		     'url' => '/admin/audio/MechetinaplaysRachmaninov-fragment-2.mp3',
 
 					      ],
 				     (object)[
@@ -57,7 +97,7 @@ function getTracks($composer = null)
 					      'sex' => '',
 					      'age' => 'Подростки',
 					      'range' => '00:00-10:14',
-					      'track_id' => 1,		     'url' => '/audio/MechetinaplaysRachmaninov-fragment-3.mp3',
+					      'track_id' => 1,		     'url' => '/admin/audio/MechetinaplaysRachmaninov-fragment-3.mp3',
 
 					      ],
 ]
@@ -65,7 +105,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '2',
 		     'title' => 'RachDayssmall',
-		     'url' => '/audio/RachDayssmall.mp3',
+		     'url' => '/admin/audio/RachDayssmall.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
@@ -74,7 +114,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '3',
 		     'title' => 'Rachmaninov-Vocalise',
-		     'url' => '/audio/Rachmaninov-Vocalise.mp3',
+		     'url' => '/admin/audio/Rachmaninov-Vocalise.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
@@ -83,7 +123,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '4',
 		     'title' => 'PromoTchaikovskyMatsuevGergiev',
-		     'url' => '/audio/PromoTchaikovskyMatsuevGergiev.mp3',
+		     'url' => '/admin/audio/PromoTchaikovskyMatsuevGergiev.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 2,
@@ -92,7 +132,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '5',
 		     'title' => 'Tchaikovsky_Lebedinoe',
-		     'url' => '/audio/Tchaikovsky_Lebedinoe.mp3',
+		     'url' => '/admin/audio/Tchaikovsky_Lebedinoe.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 2,
