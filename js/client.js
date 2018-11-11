@@ -319,9 +319,9 @@ $(document).ready(function() {
     setTimeout(function() {
         cameraWorker.load([
             { id: 'img1', url: './assets/il.jpg' },
-            { id: 'img2', url: './assets/poster1_plain.png' },
+            // { id: 'img2', url: './assets/poster1_plain.png' },
             // { id: 'img2', url: './assets/poster2_plain.png' }
-        ], { mode: 'photo' }).then(function() {
+        ], { mode: 'webcam' }).then(function() {
             showView('camera');
         })
 	}, 550);
