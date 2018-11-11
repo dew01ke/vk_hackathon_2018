@@ -9,8 +9,6 @@ $pdo = getDB();
 
 $route = filter_input(INPUT_GET, 'route');
 
-
-
 switch ($route) {
 case null:
 case '':

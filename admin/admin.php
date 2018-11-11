@@ -180,7 +180,7 @@ function _addFragment()
   $data = $_POST;
   $data['track_id'] = $_GET['track_id'];
   //ffmpeg
-  //createFragment($pdo, $_POST);
+  createFragment($pdo, $_POST);
   header('Location: /admin.php?route=track&id='  . $_GET['track_id']);
 }
 
