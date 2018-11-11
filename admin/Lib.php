@@ -70,7 +70,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '1',
 		     'title' => 'MechetinaplaysRachmaninov',
-		     'url' => '/admin/audio/MechetinaplaysRachmaninov.mp3',
+		     'url' => '/assets/MechetinaplaysRachmaninov.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
@@ -81,7 +81,7 @@ function getTracks($composer = null)
 					      'age' => 'Дети',
 					      'range' => '12:45-24:14',
 					      'track_id' => 1,
-					      'url' => '/admin/audio/MechetinaplaysRachmaninov-fragment-1.mp3',
+					      'url' => '/assets/MechetinaplaysRachmaninov-fragment-1.mp3',
 
 					      ],
 				     (object)[
@@ -89,7 +89,7 @@ function getTracks($composer = null)
 					      'sex' => 'female',
 					      'age' => '',
 					      'range' => '00:00-10:14',
-					      'track_id' => 1,		     'url' => '/admin/audio/MechetinaplaysRachmaninov-fragment-2.mp3',
+					      'track_id' => 1,		     'url' => '/assets/MechetinaplaysRachmaninov-fragment-2.mp3',
 
 					      ],
 				     (object)[
@@ -97,7 +97,7 @@ function getTracks($composer = null)
 					      'sex' => '',
 					      'age' => 'Подростки',
 					      'range' => '00:00-10:14',
-					      'track_id' => 1,		     'url' => '/admin/audio/MechetinaplaysRachmaninov-fragment-3.mp3',
+					      'track_id' => 1,		     'url' => '/assets/MechetinaplaysRachmaninov-fragment-3.mp3',
 
 					      ],
 ]
@@ -105,7 +105,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '2',
 		     'title' => 'RachDayssmall',
-		     'url' => '/admin/audio/RachDayssmall.mp3',
+		     'url' => '/assets/RachDayssmall.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
@@ -114,7 +114,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '3',
 		     'title' => 'Rachmaninov-Vocalise',
-		     'url' => '/admin/audio/Rachmaninov-Vocalise.mp3',
+		     'url' => '/assets/Rachmaninov-Vocalise.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 3,
@@ -123,7 +123,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '4',
 		     'title' => 'PromoTchaikovskyMatsuevGergiev',
-		     'url' => '/admin/audio/PromoTchaikovskyMatsuevGergiev.mp3',
+		     'url' => '/assets/PromoTchaikovskyMatsuevGergiev.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 2,
@@ -132,7 +132,7 @@ function getTracks($composer = null)
 	    (object)[
 		     'id' => '5',
 		     'title' => 'Tchaikovsky_Lebedinoe',
-		     'url' => '/admin/audio/Tchaikovsky_Lebedinoe.mp3',
+		     'url' => '/assets/Tchaikovsky_Lebedinoe.mp3',
 		     'age' => 0,
 		     'sex' => 0,
 		     'composer_id' => 2,
