@@ -1,13 +1,14 @@
 var settings = {
-	mainInterval: 30,
+	mainInterval: 10,
 	moveThreshold: 20,
 	moveSmoothing: 50
-}
+};
+var visibleMarkers = [];
 
 Number.prototype.padLeft = function(base,chr) {
 	var len = (String(base || 10).length - String(this).length)+1;
 	return len > 0? new Array(len).join(chr || '0')+this : this;
-}
+};
 
 function getTimestamp(dt) {
 	var d = dt ? new Date(dt) : new Date();
@@ -45,10 +46,10 @@ function showView(id, data) {
 		$(".view.active").removeClass("active");
 		$(".view[item=" + id + "]").addClass("active");
 		$(".close_view").show();
-		switch(id) {
 
+		switch(id) {
 			case "intro":
-				setTimeout("showView('camera');", 2000);
+				// setTimeout("showView('camera');", 2000);
 				$(".close_view").hide();
 				break;
 
@@ -65,6 +66,7 @@ function showView(id, data) {
 				break;
 			
 		}
+
 		$(".view[item=" + currentView + "]").scrollTop(0);
 	}
 }
@@ -202,11 +204,16 @@ function fillReserve(data) {
 var loopAnchor = getTimestamp(), tC = 0;
 var activeMarkers = {};
 
+function updateVisibleMarkers(markers) {
+    visibleMarkers = markers;
+}
+
 function getVisiblePosters() {
-	var dummyData = []
-	dummyData.push( { id: 1, x: 100 + Math.random() * 50, y: 300 + Math.random() * 100 } );
-	if (Math.floor(viewTime) % 2 == 0) dummyData.push( { id: 2, x: 300 + Math.random() * 100, y: 200 + Math.random() * 100 } );
-	return dummyData;
+	return visibleMarkers;
+	// var dummyData = []
+	// dummyData.push( { id: 1, x: 100 + Math.random() * 50, y: 300 + Math.random() * 100 } );
+	// if (Math.floor(viewTime) % 2 == 0) dummyData.push( { id: 2, x: 300 + Math.random() * 100, y: 200 + Math.random() * 100 } );
+	// return dummyData;
 }
 
 function addMarker(obj) {
@@ -250,15 +257,19 @@ function cameraLoop() {
 		} else {
 			marker.opacity = Math.min(marker.opacity + 0.05 * tC, 1);
 		}
+
 		marker.marker.css("opacity", marker.opacity);
-		var dX = marker.targetX - marker.currentX;
-		var dY = marker.targetY - marker.currentY;
-		if (dX > settings.moveThreshold || dY > settings.moveThreshold) {
-			marker.currentX += dX / settings.moveSmoothing;
-			marker.currentY += dY / settings.moveSmoothing;
-		}
-		marker.marker.css("left", marker.currentX + "px");
-		marker.marker.css("top", marker.currentY + "px");
+        marker.marker.css("left", marker.targetX + "px");
+        marker.marker.css("top", marker.targetY + "px");
+
+		// var dX = marker.targetX - marker.currentX;
+		// var dY = marker.targetY - marker.currentY;
+		// if (dX > settings.moveThreshold || dY > settings.moveThreshold) {
+		// 	marker.currentX += dX / settings.moveSmoothing;
+		// 	marker.currentY += dY / settings.moveSmoothing;
+		// }
+		// marker.marker.css("left", marker.currentX + "px");
+		// marker.marker.css("top", marker.currentY + "px");
 	}
 }
 
@@ -267,14 +278,12 @@ function audioLoop() {
 }
 
 function mainLoop() {
-	
 	viewTime = getTimestamp() - viewStart;
 	var loopDelta = getTimestamp() - loopAnchor;
 	tC = loopDelta / (settings.mainInterval / 1000);
 	loopAnchor = getTimestamp();
 
 	switch(currentView) {
-		
 		case "":
 			showView("intro");
 			break;
@@ -295,19 +304,27 @@ function mainLoop() {
 			
 		case "desktop":
 			break;
-			
 	}
-	
 }
 
 
-window.addEventListener('error', function(e) {
-
-}, true);
+window.addEventListener('error', function(e) {}, true);
   
 $(document).ready(function() {
-
 	setInterval(mainLoop, settings.mainInterval);
+
+    const cameraWorker = new CameraWorker();
+
+    // Кое-кто не учил в интро, что начальная анимация может блокироваться из-за расчета данных от паттернов
+    setTimeout(function() {
+        cameraWorker.load([
+            { id: 'img1', url: './assets/il.jpg' },
+            // { id: 'img2', url: './assets/poster1_plain.png' },
+            // { id: 'img2', url: './assets/poster2_plain.png' }
+        ], { mode: 'webcam' }).then(function() {
+            showView('camera');
+        })
+	}, 550);
 
 	var isMobile = {
 		Android: function() {
@@ -316,11 +333,10 @@ $(document).ready(function() {
 		iOS: function() {
 			return navigator.userAgent.match(/iPhone|iPad|iPod/i);
 		}
-	}
+	};
 	
 	if (!isMobile.Android() && !isMobile.iOS()) {
 		// Раскомментировать, чтобы на десктопах ставилась заглушка
 		// showView("desktop");
 	}
-
 });
