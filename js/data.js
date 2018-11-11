@@ -1,4 +1,4 @@
-var posterData = {
+var fallbackpPosterData = {
 	img1: {
 		image: "./data/tchaikovsky/tchaikovsky.jpg",
 		first_name: "Петр Ильич",

@@ -4,6 +4,7 @@ var settings = {
 	moveSmoothing: 50
 };
 var visibleMarkers = [];
+var configApiEndpoint = 'http://hack18/index.php';
 
 Number.prototype.padLeft = function(base,chr) {
 	var len = (String(base || 10).length - String(this).length)+1;
@@ -307,6 +308,17 @@ function mainLoop() {
 	}
 }
 
+function loadConfig(url) {
+    return new Promise(function(resolve, reject) {
+        $.getJSON(url)
+            .done(function(data) {
+                return resolve(data);
+            })
+            .fail(function() {
+                return reject(null);
+            });
+    });
+}
 
 window.addEventListener('error', function(e) {}, true);
   
@@ -319,7 +331,7 @@ $(document).ready(function() {
     setTimeout(function() {
         cameraWorker.load([
             { id: 'img1', url: './assets/il.jpg' },
-            // { id: 'img2', url: './assets/poster1_plain.png' },
+            { id: 'img2', url: './assets/poster1_plain.png' },
             // { id: 'img2', url: './assets/poster2_plain.png' }
         ], { mode: 'webcam' }).then(function() {
             showView('camera');
